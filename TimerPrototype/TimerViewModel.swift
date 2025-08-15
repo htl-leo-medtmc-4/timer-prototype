@@ -49,4 +49,15 @@ public struct TimerViewModel {
         pauseTime = nil
         endTime = nil
     }
+    
+    public mutating func resume(at date: Date) {
+        if let pauseTime = pauseTime {
+            isActive = true
+            let timeSincePause = Calendar.current.dateComponents([.hour, .minute, .second], from: pauseTime, to: date)
+            let secondsSincePause = Double(timeSincePause.hour!*3600 + timeSincePause.minute!*60 + timeSincePause.second!)
+            let newEndtime = endTime?.addingTimeInterval(secondsSincePause)
+            endTime = newEndtime
+            self.pauseTime = nil
+        }
+    }
 }
