@@ -35,7 +35,7 @@ struct TimerViewModelTests {
         var timerViewModel = TimerViewModel()
         
         // act
-        timerViewModel.start(Date.now)
+        timerViewModel.start(at: Date.now)
         
         // assert
         #expect(timerViewModel.isActive)
@@ -44,7 +44,7 @@ struct TimerViewModelTests {
     @Test func itShouldReturn25RemainingMinutes_GivenAskedForRemainingMinutesAtStartTime() async throws {
         var timerViewModel = TimerViewModel()
         let timeStamp = Date.now
-        timerViewModel.start(timeStamp)
+        timerViewModel.start(at: timeStamp)
         
         // act
         let remainingTime = try #require(timerViewModel.remainingTime(at: timeStamp))
@@ -56,7 +56,7 @@ struct TimerViewModelTests {
     @Test func itShouldReturn24MinutesAnd59SecondsRemaining_GivenAskedForRemainingMinutesAfterOneSecond() async throws {
         var timerViewModel = TimerViewModel()
         let currentTime = Date.now
-        timerViewModel.start(currentTime)
+        timerViewModel.start(at: currentTime)
         
         let remainingTime = try #require(timerViewModel.remainingTime(at: currentTime.addingTimeInterval(1)))
         
@@ -66,19 +66,43 @@ struct TimerViewModelTests {
     
     @Test func itShouldBeInactive_GivenPaused() async throws {
         var timerViewModel = TimerViewModel()
-        timerViewModel.start(Date.now)
+        timerViewModel.start(at: Date.now)
         
-        timerViewModel.pause()
+        timerViewModel.pause(at: Date.now)
         
         #expect(!timerViewModel.isActive)
     }
     
-    @Test(.disabled("Do not turn off the remaining time even when paused")) func itShouldReturnTheRemainingTimeAtPause_GivenAskedForRemainingTimeAfterPaused() async throws {
+    @Test func itShouldReturnTheRemainingTimeAtPause_GivenAskedForRemainingTimeAfterPaused() async throws {
+        var timerViewModel = TimerViewModel()
+        let startTime = Date.now
+        timerViewModel.start(at: startTime)
+        timerViewModel.pause(at: startTime.addingTimeInterval(30))
         
+        let remainingTime = try #require(timerViewModel.remainingTime(at: startTime.addingTimeInterval(31)), "Remaining time should not be nil")
+        
+        #expect(remainingTime.minute == 24)
+        #expect(remainingTime.second == 30)
     }
     
-    @Test(.disabled("Reset the timer: inactive and remainingtime should be nil"))
-    func itShouldBeInactive_GivenTimerIsReset() async throws {
+    @Test func itShouldBeInactive_GivenTimerIsReset() async throws {
+        var timerViewModel = TimerViewModel()
+        timerViewModel.start(at: Date.now)
+        timerViewModel.reset(at: Date.now)
+        
+        #expect(!timerViewModel.isActive)
+    }
+    
+    @Test func itShouldReturnNilRemainingTime_GivenTimerIsReset() async throws {
+        var timerViewModel = TimerViewModel()
+        timerViewModel.start(at: Date.now)
+        timerViewModel.reset(at: Date.now)
+        
+        let remainingTime = timerViewModel.remainingTime(at: Date.now)
+        #expect(remainingTime == nil)
+    }
+    
+    @Test(.disabled("Resume")) func itShouldContinueCountingDown_GivenTimerIsResumed() async throws {
         
     }
 }
