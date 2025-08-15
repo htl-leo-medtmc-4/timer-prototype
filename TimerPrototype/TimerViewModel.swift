@@ -26,7 +26,7 @@ public struct TimerViewModel {
         }
     }
     
-    public func remainingSeconds(at date: Date) -> DateComponents? {
+    public func remainingTime(at date: Date) -> DateComponents? {
         var result: DateComponents?
         if let endTime = endTime {
             result = Calendar.current.dateComponents([.hour, .minute, .second], from: date, to: endTime)

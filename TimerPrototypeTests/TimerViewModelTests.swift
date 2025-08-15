@@ -24,7 +24,7 @@ struct TimerViewModelTests {
         let timerViewModel = TimerViewModel()
         
         // act
-        let remainingTime = timerViewModel.remainingSeconds(at: Date.now)
+        let remainingTime = timerViewModel.remainingTime(at: Date.now)
         
         // assert
         #expect(remainingTime == nil)
@@ -47,7 +47,7 @@ struct TimerViewModelTests {
         viewModel.start(timeStamp)
         
         // act
-        let remainingTime = try #require(viewModel.remainingSeconds(at: timeStamp))
+        let remainingTime = try #require(viewModel.remainingTime(at: timeStamp))
         
         //assert
         #expect(remainingTime.minute == viewModel.defaultDuration.minute)
@@ -58,7 +58,7 @@ struct TimerViewModelTests {
         let currentTime = Date.now
         timerViewModel.start(currentTime)
         
-        let remainingTime = try #require(timerViewModel.remainingSeconds(at: currentTime.addingTimeInterval(1)))
+        let remainingTime = try #require(timerViewModel.remainingTime(at: currentTime.addingTimeInterval(1)))
         
         #expect(remainingTime.minute == 24)
         #expect(remainingTime.second == 59)
