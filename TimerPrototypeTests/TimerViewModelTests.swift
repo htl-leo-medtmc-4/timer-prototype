@@ -102,6 +102,24 @@ struct TimerViewModelTests {
         #expect(remainingTime == nil)
     }
     
+    @Test func itShouldStartCountingDown_GivenTimerIsRestarted() async throws {
+        var timerViewModel = TimerViewModel()
+        let startTime = Date.now
+        let pauseTime = startTime.addingTimeInterval(30)
+        let resetTime = pauseTime.addingTimeInterval(30)
+        timerViewModel.start(at: startTime)
+        timerViewModel.pause(at: pauseTime)
+        timerViewModel.reset(at: resetTime)
+        
+        let newStartTime = resetTime.addingTimeInterval(10)
+        timerViewModel.start(at: newStartTime)
+        
+        #expect(timerViewModel.isActive)
+        let remainingTime = try #require(timerViewModel.remainingTime(at: newStartTime.addingTimeInterval(10)))
+        #expect(remainingTime.minute == 24)
+        #expect(remainingTime.second == 50)
+    }
+    
     @Test(.disabled("Resume")) func itShouldContinueCountingDown_GivenTimerIsResumed() async throws {
         
     }

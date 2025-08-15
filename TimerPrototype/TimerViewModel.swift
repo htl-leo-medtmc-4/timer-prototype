@@ -46,7 +46,7 @@ public struct TimerViewModel {
     
     public mutating func reset(at date: Date) {
         isActive = false
-//        pauseTime = nil
+        pauseTime = nil
         endTime = nil
     }
 }
