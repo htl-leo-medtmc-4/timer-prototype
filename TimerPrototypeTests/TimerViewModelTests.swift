@@ -36,10 +36,10 @@ struct TimerViewModelTests {
         viewModel.start(timeStamp)
         
         // act
-        let remainingTime = viewModel.remainingSeconds(at: timeStamp)
+        let remainingTime = try #require(viewModel.remainingSeconds(at: timeStamp))
         
         //assert
-        #expect(remainingTime == 25 * 60)
+        #expect(remainingTime.second == 25 * 60)
     }
     
     @Test func itShouldBeInactive_GivenStopped() async throws {
