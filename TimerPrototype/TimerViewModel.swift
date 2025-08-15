@@ -8,14 +8,19 @@
 import Foundation
 
 public struct TimerViewModel {
+    public let defaultDuration: Int = 25 * 60 // 25 minutes
     public private(set) var isActive: Bool = false
+
+    private var duration: Double
     private var endTime: Date?
     
-    public init() {}
+    public init() {
+        duration = Double(defaultDuration)
+    }
     
     public mutating func start(_ startTime: Date) {
         isActive = true
-        self.endTime = startTime.addingTimeInterval(25*60)
+        self.endTime = startTime.addingTimeInterval(Double(duration))
     }
     
     public func remainingSeconds(at date: Date) -> DateComponents? {
@@ -26,7 +31,7 @@ public struct TimerViewModel {
         return result
     }
     
-    public mutating func stop() {
+    public mutating func pause() {
         isActive = false
     }
 }
