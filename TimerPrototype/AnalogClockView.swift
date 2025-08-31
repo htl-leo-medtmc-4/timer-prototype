@@ -67,8 +67,8 @@ struct ClockFaceView: View {
     let minutes: Int
     let seconds: Int
     
-    var formattedTimerText: String {
-        return "\(hours): \(minutes): \(seconds)"
+    var formattedTimerText: Text {
+        return Text("\(hours, specifier: "%02d"): \(minutes, specifier: "%02d"): \(seconds, specifier: "%02d")")
     }
     
     var body: some View {
@@ -107,7 +107,7 @@ struct ClockFaceView: View {
         Text("\(Int(minute), specifier: "%02d") : \(Int(second), specifier: "%02d")")
         Spacer()
         Text("Timer")
-        Text(formattedTimerText)
+        formattedTimerText
     }
 }
 

@@ -32,7 +32,7 @@ struct TimerViewModelTests {
     
     @Test func itShouldBeActive_GivenStarted() async throws {
         // arrange
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         
         // act
         timerViewModel.start(at: Date.now)
@@ -42,7 +42,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldReturn25RemainingMinutes_GivenAskedForRemainingMinutesAtStartTime() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         let timeStamp = Date.now
         timerViewModel.start(at: timeStamp)
         
@@ -54,7 +54,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldReturn24MinutesAnd59SecondsRemaining_GivenAskedForRemainingMinutesAfterOneSecond() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         let currentTime = Date.now
         timerViewModel.start(at: currentTime)
         
@@ -65,7 +65,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldBeInactive_GivenPaused() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         timerViewModel.start(at: Date.now)
         
         timerViewModel.pause(at: Date.now)
@@ -74,7 +74,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldReturnTheRemainingTimeAtPause_GivenAskedForRemainingTimeAfterPaused() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         let startTime = Date.now
         timerViewModel.start(at: startTime)
         timerViewModel.pause(at: startTime.addingTimeInterval(30))
@@ -86,7 +86,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldBeInactive_GivenTimerIsReset() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         timerViewModel.start(at: Date.now)
         timerViewModel.reset(at: Date.now)
         
@@ -94,7 +94,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldReturnNilRemainingTime_GivenTimerIsReset() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         timerViewModel.start(at: Date.now)
         timerViewModel.reset(at: Date.now)
         
@@ -103,7 +103,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldStartCountingDown_GivenTimerIsRestarted() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         let startTime = Date.now
         let pauseTime = startTime.addingTimeInterval(30)
         let resetTime = pauseTime.addingTimeInterval(30)
@@ -121,7 +121,7 @@ struct TimerViewModelTests {
     }
     
     @Test func itShouldContinueCountingDown_GivenTimerIsResumed() async throws {
-        var timerViewModel = TimerViewModel()
+        let timerViewModel = TimerViewModel()
         let startTime = Date.now
         let pauseTime = startTime.addingTimeInterval(30)
         let resumeTime = pauseTime.addingTimeInterval(10)
