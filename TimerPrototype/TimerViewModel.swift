@@ -24,6 +24,10 @@ import Foundation
         duration = defaultDuration
     }
     
+    public init(duration: (hours: Int, minutes: Int, seconds: Int)) {
+        self.duration = DateComponents(hour: duration.hours, minute: duration.minutes, second: duration.seconds)
+    }
+    
     public func start(at startTime: Date) {
         let calendar = Calendar.current
         endTime = calendar.date(byAdding: duration, to: startTime)

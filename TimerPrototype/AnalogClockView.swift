@@ -36,7 +36,9 @@ struct TimerView: View {
     let date: Date
 
     var remainingTime: (Int, Int, Int) {
-        var result: (hour: Int, minute: Int, second: Int) = (0, 0, 0)
+        let duration = viewModel.defaultDuration
+        let (hour, minute, second) = (duration.hour!, duration.minute!, duration.second!)
+        var result: (hour: Int, minute: Int, second: Int) = (hour, minute, second)
         if let r = viewModel.remainingTime(at: date) {
             result = (r.hour!, r.minute!, r.second!)
         }

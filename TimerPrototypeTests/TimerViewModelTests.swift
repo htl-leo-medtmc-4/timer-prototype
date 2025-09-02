@@ -41,7 +41,7 @@ struct TimerViewModelTests {
         #expect(timerViewModel.status == .running)
     }
     
-    @Test func itShouldReturn25RemainingMinutes_GivenAskedForRemainingMinutesAtStartTime() async throws {
+    @Test func itShouldReturn25RemainingMinutes_GivenDefaultTimeAndAskedForRemainingMinutesAtStartTime() async throws {
         let timerViewModel = TimerViewModel()
         let timeStamp = Date.now
         timerViewModel.start(at: timeStamp)
@@ -51,6 +51,19 @@ struct TimerViewModelTests {
         
         //assert
         #expect(remainingTime.minute == timerViewModel.defaultDuration.minute)
+    }
+    
+    @Test func itShouldReturnSpecificTimeRemaining_GivenDurationSpecifiedWhenConstructed() async throws {
+        let startTime = Date.now
+        let specificTime = (hours: 1, minutes: 5, seconds: 44)
+        let timerViewModel = TimerViewModel(duration: specificTime)
+        
+        timerViewModel.start(at: startTime)
+        let remainingTime = try #require(timerViewModel.remainingTime(at: startTime))
+        
+        #expect(remainingTime.hour == specificTime.hours)
+        #expect(remainingTime.minute == specificTime.minutes)
+        #expect(remainingTime.second == specificTime.seconds)
     }
     
     @Test func itShouldReturn24MinutesAnd59SecondsRemaining_GivenAskedForRemainingMinutesAfterOneSecond() async throws {
