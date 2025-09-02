@@ -13,16 +13,19 @@ struct ButtonView: View {
     var viewModel: TimerViewModel
     
     var buttonText: String {
-        viewModel.isActive ? "Stop" : "Start"
+        return switch viewModel.status {
+            case .paused: "Resume"
+            case .running: "Pause"
+            case .stopped: "Start"
+        }
     }
 
     var body: some View {
         Button(buttonText) {
-            if viewModel.isActive {
-                viewModel.pause(at: Date())
-            } else {
-                viewModel.reset(at: Date())
-                viewModel.start(at: Date())
+            switch viewModel.status {
+                case .paused: viewModel.resume(at: Date.now)
+                case .running: viewModel.pause(at: Date.now)
+                case .stopped: viewModel.start(at: Date.now)
             }
         }
     }

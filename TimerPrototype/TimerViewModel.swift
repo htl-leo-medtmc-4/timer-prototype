@@ -8,12 +8,17 @@
 import Foundation
 
 @Observable public class TimerViewModel {
+    public enum Status {
+        case stopped, running, paused
+    }
+    
     public let defaultDuration = DateComponents(hour: 0, minute: 25, second: 0)
-    public private(set) var isActive: Bool = false
 
     private var duration: DateComponents
     private var endTime: Date?
     private var pauseTime: Date?
+    
+    public var status = Status.stopped
     
     public init() {
         duration = defaultDuration
@@ -23,7 +28,7 @@ import Foundation
         let calendar = Calendar.current
         endTime = calendar.date(byAdding: duration, to: startTime)
         if endTime != nil {
-            isActive = true
+            status = .running
         }
     }
     
@@ -41,18 +46,18 @@ import Foundation
     
     public func pause(at date: Date) {
         pauseTime = date
-        isActive = false
+        status = .paused
     }
     
     public func reset(at date: Date) {
-        isActive = false
+        status = .stopped
         pauseTime = nil
         endTime = nil
     }
     
     public func resume(at date: Date) {
         if let pauseTime = pauseTime {
-            isActive = true
+            status = .running
             let timeSincePause = Calendar.current.dateComponents([.hour, .minute, .second], from: pauseTime, to: date)
             let secondsSincePause = Double(timeSincePause.hour!*3600 + timeSincePause.minute!*60 + timeSincePause.second!)
             let newEndtime = endTime?.addingTimeInterval(secondsSincePause)

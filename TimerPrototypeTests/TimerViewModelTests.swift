@@ -11,12 +11,12 @@ import TimerPrototype
 
 struct TimerViewModelTests {
 
-    @Test func itShouldBeInactive_GivenConstructed() async throws {
+    @Test func itShouldHaveStatusStopped_GivenConstructed() async throws {
         // arrange (and act)
         let timerViewModel = TimerViewModel()
         
         // assert
-        #expect(!timerViewModel.isActive)
+        #expect(timerViewModel.status == .stopped)
     }
     
     @Test func itShouldReturnNil_GivenAskedForRemainingTimeAndNotStarted() async throws {
@@ -30,7 +30,7 @@ struct TimerViewModelTests {
         #expect(remainingTime == nil)
     }
     
-    @Test func itShouldBeActive_GivenStarted() async throws {
+    @Test func itShouldHaveStatusRunning_GivenStarted() async throws {
         // arrange
         let timerViewModel = TimerViewModel()
         
@@ -38,7 +38,7 @@ struct TimerViewModelTests {
         timerViewModel.start(at: Date.now)
         
         // assert
-        #expect(timerViewModel.isActive)
+        #expect(timerViewModel.status == .running)
     }
     
     @Test func itShouldReturn25RemainingMinutes_GivenAskedForRemainingMinutesAtStartTime() async throws {
@@ -64,13 +64,12 @@ struct TimerViewModelTests {
         #expect(remainingTime.second == 59)
     }
     
-    @Test func itShouldBeInactive_GivenPaused() async throws {
+    @Test func itShouldHaveStatusPaused_GivenPaused() async throws {
         let timerViewModel = TimerViewModel()
         timerViewModel.start(at: Date.now)
-        
         timerViewModel.pause(at: Date.now)
         
-        #expect(!timerViewModel.isActive)
+        #expect(timerViewModel.status == .paused)
     }
     
     @Test func itShouldReturnTheRemainingTimeAtPause_GivenAskedForRemainingTimeAfterPaused() async throws {
@@ -85,12 +84,12 @@ struct TimerViewModelTests {
         #expect(remainingTime.second == 30)
     }
     
-    @Test func itShouldBeInactive_GivenTimerIsReset() async throws {
+    @Test func itShouldHaveStatusStopped_GivenReset() async throws {
         let timerViewModel = TimerViewModel()
         timerViewModel.start(at: Date.now)
         timerViewModel.reset(at: Date.now)
         
-        #expect(!timerViewModel.isActive)
+        #expect(timerViewModel.status == .stopped)
     }
     
     @Test func itShouldReturnNilRemainingTime_GivenTimerIsReset() async throws {
@@ -114,7 +113,7 @@ struct TimerViewModelTests {
         let newStartTime = resetTime.addingTimeInterval(10)
         timerViewModel.start(at: newStartTime)
         
-        #expect(timerViewModel.isActive)
+        #expect(timerViewModel.status == .running)
         let remainingTime = try #require(timerViewModel.remainingTime(at: newStartTime.addingTimeInterval(10)))
         #expect(remainingTime.minute == 24)
         #expect(remainingTime.second == 50)
@@ -130,7 +129,7 @@ struct TimerViewModelTests {
         timerViewModel.pause(at: pauseTime)
         timerViewModel.resume(at: resumeTime)
         
-        #expect(timerViewModel.isActive)
+        #expect(timerViewModel.status == .running)
         
         let remainingTime = try #require(timerViewModel.remainingTime(at: resumeTime.addingTimeInterval(10)))
         #expect(remainingTime.minute == 24)
