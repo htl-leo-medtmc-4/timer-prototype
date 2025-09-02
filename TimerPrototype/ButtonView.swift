@@ -21,12 +21,20 @@ struct ButtonView: View {
     }
 
     var body: some View {
-        Button(buttonText) {
-            switch viewModel.status {
+        HStack {
+            Spacer()
+            Button(buttonText) {
+                switch viewModel.status {
                 case .paused: viewModel.resume(at: Date.now)
                 case .running: viewModel.pause(at: Date.now)
                 case .stopped: viewModel.start(at: Date.now)
+                }
             }
+            Spacer()
+            Button("Reset") {
+                viewModel.reset(at: Date.now)
+            }.disabled(viewModel.status != .paused)
+            Spacer()
         }
     }
 }
