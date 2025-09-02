@@ -12,34 +12,21 @@ struct AnalogClockView: View {
     
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0, paused: false)) { context in
-            let date = context.date
-            TimerView(viewModel: viewModel, date: date)
-        }
+        Spacer()
+        TimerAndTimelineView(viewModel: viewModel)
         Spacer()
         ButtonView(viewModel: viewModel)
+        Spacer()
     }
 }
 
-struct ButtonView: View {
+struct TimerAndTimelineView: View {
     var viewModel: TimerViewModel
     
-    var buttonText: String {
-        if viewModel.isActive {
-            return "Stop"
-        } else {
-            return "Start"
-        }
-    }
-
     var body: some View {
-        Button(buttonText) {
-            if viewModel.isActive {
-                viewModel.pause(at: Date())
-            } else {
-                viewModel.reset(at: Date())
-                viewModel.start(at: Date())
-            }
+        TimelineView(.animation(minimumInterval: 1.0, paused: false)) { context in
+            let date = context.date
+            TimerView(viewModel: viewModel, date: date)
         }
     }
 }
@@ -57,7 +44,8 @@ struct TimerView: View {
     }
     
     var body: some View {
-        ClockFaceView(date: date, hours: remainingTime.0, minutes: remainingTime.1, seconds: remainingTime.2)
+        let (hours, minutes, seconds) = remainingTime
+        ClockFaceView(date: date, hours: hours, minutes: minutes, seconds: seconds)
     }
 }
 
@@ -105,7 +93,6 @@ struct ClockFaceView: View {
         }
         .frame(width: 200, height: 200)
         Text("\(Int(minute), specifier: "%02d") : \(Int(second), specifier: "%02d")")
-        Spacer()
         Text("Timer")
         formattedTimerText
     }
